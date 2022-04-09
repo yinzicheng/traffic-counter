@@ -1,4 +1,4 @@
-name: traffic-counter CI
+name: traffic-counter CI/CD
 
 on:
   push:
