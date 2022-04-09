@@ -20,9 +20,7 @@ The program will output:
 
 ```
 cd $PROJECT_PATH
-sbt root/clean
-sbt root/test
-sbt root/assembly
+sbt root/clean root/test root/assembly
 java -jar target/scala-2.13/trafficcounter.jar
 ```
 
