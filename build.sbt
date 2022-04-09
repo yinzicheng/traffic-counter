@@ -12,7 +12,6 @@ lazy val dependencies = Seq(
 lazy val root = (project in file("."))
   .settings(
     name := "traffic-counter",
-    idePackagePrefix := Some("org.abc.trafficcounter"),
     libraryDependencies ++= dependencies,
     assembly / mainClass := Some("org.abc.trafficcounter.Main"),
     assembly / assemblyJarName := "trafficcounter.jar"

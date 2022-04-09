@@ -19,7 +19,11 @@ The program will output:
 ### Run the app local:
 
 ```
-todo
+cd $PROJECT_PATH
+sbt root/clean
+sbt root/test
+sbt root/assembly
+java -jar target/scala-2.13/trafficcounter.jar
 ```
 
 ### Build/Deploy the app:
