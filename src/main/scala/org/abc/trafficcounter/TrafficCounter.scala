@@ -19,15 +19,9 @@ case class DailyCar(date: LocalDate, cars: Int) {
 }
 
 
-object Utils {
-
-  def timestampToDate(timestamp: LocalDateTime, pattern: String = "yyyy-MM-dd"): LocalDate = {
-    val dateStr = timestamp.toString.substring(0, 10)
-    LocalDate.parse(dateStr, ofPattern(pattern))
-  }
-
-}
-
+/**
+ * Companion object for TrafficCounter class
+ */
 object TrafficCounter {
 
   val logger: Logger = Logger(getClass.getName)
@@ -61,7 +55,9 @@ object TrafficCounter {
 
 }
 
-
+/**
+ * TrafficCounter is used to count number of cars that go past a road
+ */
 class TrafficCounter(dataDir: String) {
 
   val allHalfHourlyCars: Vector[HalfHourlyCar] = getAllHalfHourlyCars().sortBy(_.timestamp)
