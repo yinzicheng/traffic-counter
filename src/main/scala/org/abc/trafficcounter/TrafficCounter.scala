@@ -1,9 +1,8 @@
 package org.abc.trafficcounter
 
-import TrafficCounter._
-import Utils._
-
 import com.typesafe.scalalogging.Logger
+import org.abc.trafficcounter.TrafficCounter._
+import org.abc.trafficcounter.Utils._
 
 import java.io.File
 import java.time.format.DateTimeFormatter.ofPattern

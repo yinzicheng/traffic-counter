@@ -46,8 +46,8 @@ class TrafficCounterTests extends AnyFreeSpec {
     "getAllHalfHourlyCars should return all HalfHourlyCar items from all files in the input path" in {
       val halfHourlyCars = counter.getAllHalfHourlyCars()
       assert(halfHourlyCars.length == 6)
-      assert(halfHourlyCars.head.toString == "2021-12-01T05:00 8")
-      assert(halfHourlyCars.last.toString == "2021-12-02T07:30 9")
+      val totalCars = halfHourlyCars.map(_.cars).sum
+      assert(totalCars == 27)
     }
 
     "TrafficCounter should throws exception if input file is unavailable" in {
