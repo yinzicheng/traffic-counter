@@ -2,7 +2,6 @@ package org.abc.trafficcounter
 
 import com.typesafe.scalalogging.Logger
 
-
 object Main {
 
   val logger: Logger = Logger(getClass.getName)
