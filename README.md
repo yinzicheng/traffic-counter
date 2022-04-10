@@ -21,11 +21,11 @@ The program will output:
 ```
 cd $PROJECT_PATH
 sbt root/clean root/test root/assembly
-java -jar target/scala-2.13/trafficcounter.jar
+java -jar target/scala-2.13/trafficcounter.jar src/main/resources/data/
 ```
 
-### Build/Deploy the app:
+### Build/Deploy the app (Github Action):
 
 ```
-todo
+see .github/workflow/traffic-counter.yml
 ```

@@ -21,7 +21,11 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: Run tests
+    - name: Run Tests
       run: sbt clean test
     - name: Run Package
       run: sbt assembly
+    - run: |
+        echo "test Jar file"
+        java -jar target/scala-2.13/trafficcounter.jar src/main/resources/data/
+
