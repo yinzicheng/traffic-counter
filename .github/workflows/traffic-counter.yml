@@ -1,4 +1,4 @@
-name: traffic-counter CI/CD
+name: traffic-counter-ci
 
 on:
   push:
@@ -11,21 +11,31 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-    - name: Run Tests
-      run: sbt clean test
-    - name: Run Package
-      run: sbt assembly
-    - run: |
-        echo "test Jar file"
-        java -jar target/scala-2.13/trafficcounter.jar src/main/resources/data/
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Cache SBT
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.ivy2/cache
+            ~/.sbt
+          key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt') }}
+
+      - name: Run Tests
+        run: sbt clean test
+
+      - name: Run Package
+        run: sbt assembly
+
+      - run: |
+          echo "test Jar file"
+          java -jar target/scala-2.13/trafficcounter.jar src/main/resources/data/
 
