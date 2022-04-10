@@ -2,12 +2,20 @@ package org.abc.trafficcounter
 
 import org.scalatest.freespec.AnyFreeSpec
 
+import java.io.FileNotFoundException
 import java.time.format.DateTimeFormatter.ofPattern
 import java.time.{LocalDate, LocalDateTime}
 import scala.util.{Failure, Success}
 
 class TrafficCounterTests extends AnyFreeSpec {
 
+  "Smoke Test" - {
+
+    "Smoke Test should not fail" in {
+      val args = Array( "src/main/resources/data/")
+      Main.main(args)
+    }
+  }
 
   "Test utility functions in Utils" - {
 
@@ -52,7 +60,7 @@ class TrafficCounterTests extends AnyFreeSpec {
 
     "TrafficCounter should throws exception if input file is unavailable" in {
       val dataDir = "src/main/resources/dummy/"
-      assertThrows[RuntimeException] {
+      assertThrows[FileNotFoundException] {
         TrafficCounter(dataDir)
       }
     }

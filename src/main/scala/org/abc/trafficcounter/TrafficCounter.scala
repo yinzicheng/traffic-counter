@@ -4,7 +4,7 @@ import com.typesafe.scalalogging.Logger
 import org.abc.trafficcounter.TrafficCounter._
 import org.abc.trafficcounter.Utils._
 
-import java.io.File
+import java.io.{File, FileNotFoundException}
 import java.time.format.DateTimeFormatter.ofPattern
 import java.time.{LocalDate, LocalDateTime}
 import scala.io.Source
@@ -64,7 +64,7 @@ object TrafficCounter {
 
 class TrafficCounter(dataDir: String) {
 
-  val allHalfHourlyCars: Vector[HalfHourlyCar] = getAllHalfHourlyCars()
+  val allHalfHourlyCars: Vector[HalfHourlyCar] = getAllHalfHourlyCars().sortBy(_.timestamp)
 
   def getAllHalfHourlyCars(fileExt: String = "txt"): Vector[HalfHourlyCar] = {
     val inputDir = new File(dataDir)
@@ -83,7 +83,7 @@ class TrafficCounter(dataDir: String) {
         agg.appendedAll(item)
       }
     } else {
-      throw new RuntimeException(s"Input data directory $dataDir doesn't exist...")
+      throw new FileNotFoundException(s"Input data directory $dataDir doesn't exist...")
     }
   }
 
