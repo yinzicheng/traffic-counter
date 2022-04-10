@@ -1,0 +1,9 @@
+/.github/
+/.bsp/
+/.idea/
+/docker/Dockerfile
+/target/
+/project/*/target
+/project/target
+README.md
+.gitignore

@@ -16,13 +16,20 @@ The program will output:
 * The top 3 half hours with most cars, in the same format as the input file
 * The 1.5 hour period with least cars (i.e. 3 contiguous half hour records)
 
-### Run the app local:
+### Run the app as uber jar:
 
 ```
 cd $PROJECT_PATH
 sbt root/clean root/test root/assembly
 java -jar target/scala-2.13/trafficcounter.jar src/main/resources/data/
 ```
+
+### Run the app with Docker:
+```
+docker build -t traffic-counter -f docker/Dockerfile .
+docker run --rm traffic-counter src/main/resources/data/
+```
+
 
 ### Build/Deploy the app (Github Action):
 
