@@ -1,12 +1,12 @@
 # traffic-counter
 
-### Requiredment:
+### Requirement:
 
 An automated traffic counter sits by a road and counts the number of cars that go past. Every half-hour the counter
 outputs the number of cars seen and resets the counter to zero. You are part of a development team that has been asked
 to implement a system to manage this data.
 
-### Output:
+### Program Output:
 
 The program will output:
 
