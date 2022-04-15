@@ -12,7 +12,7 @@ class TrafficCounterTests extends AnyFreeSpec {
   "Smoke Test" - {
 
     "Smoke Test should not fail" in {
-      val args = Array( "src/main/resources/data/")
+      val args = Array("src/main/resources/data/")
       Main.main(args)
     }
   }
@@ -53,7 +53,7 @@ class TrafficCounterTests extends AnyFreeSpec {
 
     "getAllHalfHourlyCars should return all HalfHourlyCar items from all files in the input path" in {
       val halfHourlyCars = counter.getAllHalfHourlyCars()
-      assert(halfHourlyCars.length == 6)
+      assert(halfHourlyCars.length == 8)
       val totalCars = halfHourlyCars.map(_.cars).sum
       assert(totalCars == 27)
     }
@@ -86,8 +86,13 @@ class TrafficCounterTests extends AnyFreeSpec {
 
     "getLeastCarOfContiguousPeriods should return records with n contiguous periods" in {
       val least1 = counter.getLeastCarOfContiguousPeriods(1)
-      val least3 = counter.getLeastCarOfContiguousPeriods(3)
       assert(least1.head.toString == "2021-12-02T06:30 0")
+
+      val least2 = counter.getLeastCarOfContiguousPeriods(2)
+      assert(least2.head.toString == "2021-12-02T08:00 0")
+      assert(least2.last.toString == "2021-12-02T08:30 0")
+
+      val least3 = counter.getLeastCarOfContiguousPeriods(3)
       assert(least3.head.toString == "2021-12-02T06:30 0")
       assert(least3.last.toString == "2021-12-01T05:30 2")
     }

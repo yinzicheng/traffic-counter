@@ -130,7 +130,7 @@ class TrafficCounter(dataDir: String) {
    */
   def getLeastCarOfContiguousPeriods(numOfPeriod: Int = 3): Seq[HalfHourlyCar] = {
     val length = allHalfHourlyCars.length
-    val listOfItems = for (from <- 0 until length - 2)
+    val listOfItems = for (from <- 0 to length - numOfPeriod)
       yield allHalfHourlyCars.slice(from, from + numOfPeriod)
 
     listOfItems.minBy(list => list.map(_.cars).sum).sortBy(_.cars)
