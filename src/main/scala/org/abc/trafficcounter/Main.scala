@@ -18,7 +18,7 @@ object Main {
     val counter = TrafficCounter(dataDir)
 
     logger.info(s"\n1. Total cars:\n${counter.totalCars}")
-    logger.info(s"\n2. Daily cars:\n${counter.dailyCars.mkString("\n")}")
+    logger.info(s"\n2. Daily cars:\n${counter.dailyCars().mkString("\n")}")
     logger.info(s"\n3. Top 3 hourly cars:\n${counter.getTopHalfHourlyCars(3).mkString("\n")}")
     logger.info(s"\n4. Least Car of Contiguous Periods:\n${counter.getLeastCarOfContiguousPeriods(3).mkString("\n")}")
   }

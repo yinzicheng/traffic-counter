@@ -1,6 +1,8 @@
 package org.abc.trafficcounter
 
-import org.scalatest.freespec.AnyFreeSpec
+import org.abc.trafficcounter.Main.logger
+import org.abc.trafficcounter.TrafficCounter.lineToHalfHourlyCar
+import org.scalatest.freespec._
 
 import java.io.FileNotFoundException
 import java.time.format.DateTimeFormatter.ofPattern
@@ -71,7 +73,7 @@ class TrafficCounterTests extends AnyFreeSpec {
     }
 
     "dailyCars should return DailyCar record per day from input data" in {
-      val dailyCars = counter.dailyCars
+      val dailyCars = counter.dailyCarsPar()
       assert(dailyCars.head.toString == "2021-12-01 11")
       assert(dailyCars.last.toString == "2021-12-02 16")
     }
@@ -97,6 +99,34 @@ class TrafficCounterTests extends AnyFreeSpec {
       assert(least3.last.toString == "2021-12-01T05:30 2")
     }
 
+  }
+
+  "Performance Test" - {
+    val inputData = (1 to 10000000)
+      .map(_ => lineToHalfHourlyCar("2021-12-08T23:00:00 1"))
+
+    val counter = TrafficCounter(inputData)
+
+
+    "1: Test code performance with large input data" ignore {
+      logger.info(s"\n1. Total cars:\n${counter.totalCars}")
+    }
+
+    "2.1: Test code performance with large input data" in {
+      logger.info(s"\n2. Daily cars:\n${counter.dailyCars().mkString("\n")}")
+    }
+
+    "2.2: Test code performance with large input data" in {
+      logger.info(s"\n2. Daily cars:\n${counter.dailyCarsPartition(6).mkString("\n")}")
+    }
+
+    "3: Test code performance with large input data" ignore {
+      logger.info(s"\n3. Top 3 hourly cars:\n${counter.getTopHalfHourlyCars(3).mkString("\n")}")
+    }
+
+    "4: Test code performance with large input data" ignore {
+      logger.info(s"\n4. Least Car of Contiguous Periods:\n${counter.getLeastCarOfContiguousPeriods(3).mkString("\n")}")
+    }
   }
 
 }

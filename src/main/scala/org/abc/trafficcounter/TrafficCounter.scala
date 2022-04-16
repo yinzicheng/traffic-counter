@@ -30,6 +30,10 @@ object TrafficCounter {
     new TrafficCounter(dataDir)
   }
 
+  def apply(inputData: Seq[HalfHourlyCar]): TrafficCounter = {
+    new TrafficCounter("", Some(inputData))
+  }
+
   /**
    * read input file and convert to List of HalfHourlyCar
    *
@@ -58,9 +62,17 @@ object TrafficCounter {
 /**
  * TrafficCounter is used to count number of cars that go past a road
  */
-class TrafficCounter(dataDir: String) {
+class TrafficCounter(dataDir: String, inputData: Option[Seq[HalfHourlyCar]] = None) {
 
-  val allHalfHourlyCars: Vector[HalfHourlyCar] = getAllHalfHourlyCars().sortBy(_.timestamp)
+  /**
+   * data can be from input directory (files) or scala seq
+   */
+  val allHalfHourlyCars: Seq[HalfHourlyCar] = if (inputData.isEmpty)
+    getAllHalfHourlyCars().sortBy(_.timestamp)
+  else if (inputData.get.isEmpty)
+    throw new IllegalArgumentException("Either input dir or input data should not be None")
+  else
+    inputData.get
 
   def getAllHalfHourlyCars(fileExt: String = "txt"): Vector[HalfHourlyCar] = {
     val inputDir = new File(dataDir)
@@ -100,13 +112,48 @@ class TrafficCounter(dataDir: String) {
    *
    * @return
    */
-  def dailyCars: List[DailyCar] = {
-    allHalfHourlyCars
+  def dailyCars(halfHourlyCars: Seq[HalfHourlyCar] = allHalfHourlyCars): List[DailyCar] = {
+    halfHourlyCars
       .map(item => DailyCar(timestampToDate(item.timestamp), item.cars))
       .groupMapReduce(_.date)(_.cars)(_ + _)
       .toList
       .map { case (date, cars) => DailyCar(date, cars) }
       .sortBy(_.date)
+  }
+
+
+  def dailyCarsPar(): List[DailyCar] = {
+    import scala.collection.parallel.CollectionConverters._
+
+    allHalfHourlyCars.par
+      .map(item => DailyCar(timestampToDate(item.timestamp), item.cars))
+      .groupBy(_.date)
+      .map { case (date, halfHourlyCar) => DailyCar(date, halfHourlyCar.map(_.cars).sum) }
+      .toList
+      .sortBy(_.date)
+
+  }
+
+  def dailyCarsPartition(parallelism: Int): Seq[DailyCar] = {
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.duration.Duration
+    import scala.concurrent.{Await, Future}
+
+
+    val length = allHalfHourlyCars.length
+    val batchSize = length / parallelism
+
+    val listOfItems = for (batchId <- 0 until parallelism;
+                           start = batchId * batchSize;
+                           end = if (batchId < parallelism - 1) start + batchSize else length)
+    yield allHalfHourlyCars.slice(start, end)
+
+    listOfItems
+      .map(items => Future[Seq[DailyCar]](dailyCars(items)))
+      .flatMap { future => Await.result(future, Duration.Inf) }
+      .groupMapReduce(_.date)(_.cars)(_ + _)
+      .map { case (date, cars) => DailyCar(date, cars) }
+      .toVector
   }
 
 
@@ -116,7 +163,7 @@ class TrafficCounter(dataDir: String) {
    * @param n Top N
    * @return The top 3 half hours with most cars, in the same format as the input file
    */
-  def getTopHalfHourlyCars(n: Int = 3): Vector[HalfHourlyCar] = {
+  def getTopHalfHourlyCars(n: Int = 3): Seq[HalfHourlyCar] = {
     allHalfHourlyCars
       .sortBy(_.cars)(Ordering[Int].reverse)
       .take(n)

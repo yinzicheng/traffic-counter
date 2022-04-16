@@ -4,6 +4,7 @@ ThisBuild / scalaVersion := "2.13.8"
 
 
 lazy val dependencies = Seq(
+  "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
   "ch.qos.logback" % "logback-classic" % "1.2.10",
   "org.scalatest" %% "scalatest" % "3.2.11" % "test"
